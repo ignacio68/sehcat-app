@@ -4,7 +4,12 @@ module.exports = {
 
   presets: [require('nativewind/preset')],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: '#29abe2',
+        secondary: '#8cc63f',
+      },
+    },
   },
   plugins: [],
 };

@@ -1,26 +1,25 @@
-import React from 'react';
-import { View, Text, SafeAreaView, Platform, useWindowDimensions } from 'react-native';
 import { usePathname } from 'expo-router';
+import React from 'react';
+import { View, Text, SafeAreaView, Platform } from 'react-native';
+
+import InstallPWA from './InstallPWA';
 import WebMenu from './WebMenu';
-import { appColors } from '../utils/screenConfig';
 
 export default function ActionBar() {
-  const { width } = useWindowDimensions();
   const pathname = usePathname();
-  const isWeb = width >= 768;
-  const isLoginScreen = pathname.startsWith('/(auth)');
-
-  if (isLoginScreen) {
-    return null;
-  }
+  const isWeb = Platform.OS === 'web';
+  const isLoginScreen = pathname === '/login';
 
   return (
-    <SafeAreaView style={{ backgroundColor: appColors.primary }}>
-      <View className={`px-4 py-3 ${Platform.OS === 'android' ? 'pt-2' : ''} flex justify-center items-center`}>
-        <Text style={{ color: appColors.secondary, fontSize: 24, fontWeight: 'bold' }}>SeCAL</Text>
-        <Text style={{ color: 'white', fontSize: 14 }}>Calculadora de MAB</Text>
+    <SafeAreaView className="bg-[#29abe2]">
+      <View className="flex-row items-center justify-between px-4 py-3">
+        <View>
+          <Text className="text-2xl font-bold text-[#8cc63f]">SeCAL</Text>
+          <Text className="text-sm text-white">Calculadora de MAB</Text>
+        </View>
+        <InstallPWA />
       </View>
-      {isWeb && <WebMenu />}
+      {isWeb && !isLoginScreen && <WebMenu />}
     </SafeAreaView>
   );
 }
