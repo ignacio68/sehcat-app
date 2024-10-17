@@ -14,12 +14,14 @@ declare global {
 
 export default function InstallPWA() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
     if (Platform.OS === 'web') {
       const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
         e.preventDefault();
         setDeferredPrompt(e);
+        setIsInstallable(true);
       };
 
       window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt as any);
@@ -31,15 +33,20 @@ export default function InstallPWA() {
   }, []);
 
   const handleInstallClick = async () => {
-    if (Platform.OS === 'web' && deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        console.log('User accepted the install prompt');
+    if (Platform.OS === 'web') {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+          setIsInstallable(false);
+        } else {
+          console.log('User dismissed the install prompt');
+        }
+        setDeferredPrompt(null);
       } else {
-        console.log('User dismissed the install prompt');
+        console.log('The app is already installed or not installable');
       }
-      setDeferredPrompt(null);
     } else if (Platform.OS === 'android') {
       Linking.openURL('https://play.google.com/store/apps/details?id=com.inyeccion.sehcat&hl=es');
     } else if (Platform.OS === 'ios') {
@@ -54,6 +61,11 @@ export default function InstallPWA() {
     buttonText = 'Obtener en Google Play';
   } else if (Platform.OS === 'ios') {
     buttonText = 'Obtener en App Store';
+  }
+
+  // No mostrar el botón en web si la app no es instalable
+  if (Platform.OS === 'web' && !isInstallable) {
+    return null;
   }
 
   return (
