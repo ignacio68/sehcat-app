@@ -15,9 +15,10 @@ declare global {
 export default function InstallPWA() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = useState(false);
+  const isDevice = Platform.OS === 'android' || Platform.OS === 'ios';
 
   useEffect(() => {
-    if (Platform.OS === 'web') {
+    if (!isDevice) {
       const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
         e.preventDefault();
         setDeferredPrompt(e);
@@ -33,7 +34,7 @@ export default function InstallPWA() {
   }, []);
 
   const handleInstallClick = async () => {
-    if (Platform.OS === 'web') {
+    if (!isDevice) {
       if (deferredPrompt) {
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
