@@ -15,12 +15,18 @@ export default function WebMenu() {
 
   const currentPath = usePathname();
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'center', backgroundColor: 'white', borderBottomWidth: 1, borderBottomColor: '#e5e7eb' }}>
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        borderBottomWidth: 1,
+        borderBottomColor: '#e5e7eb',
+      }}>
       {menuItems.map((item) => {
         const isActive = currentPath === item.path;
         const activeColor = screenConfig[item.key as keyof typeof screenConfig].color;
-        
-        
+
         return (
           <Pressable
             key={item.path}
@@ -29,16 +35,14 @@ export default function WebMenu() {
               paddingHorizontal: 16,
               paddingVertical: 8,
               borderBottomWidth: isActive ? 2 : 0,
-              borderBottomColor: isActive ? activeColor : 'transparent'
-            }}
-          >
-            <Text 
+              borderBottomColor: isActive ? activeColor : 'transparent',
+            }}>
+            <Text
               style={{
                 fontSize: 18,
                 fontWeight: isActive ? 'bold' : 'normal',
-                color: isActive ? activeColor : '#4b5563'
-              }}
-            >
+                color: isActive ? activeColor : '#4b5563',
+              }}>
               {item.name}
             </Text>
           </Pressable>

@@ -1,6 +1,6 @@
 import { usePathname } from 'expo-router';
 import React from 'react';
-import { View, Text, SafeAreaView, Platform } from 'react-native';
+import { View, Text, SafeAreaView, Platform, useWindowDimensions } from 'react-native';
 
 import InstallPWA from './InstallPWA';
 import WebMenu from './WebMenu';
@@ -8,6 +8,8 @@ import WebMenu from './WebMenu';
 export default function ActionBar() {
   const pathname = usePathname();
   const isWeb = Platform.OS === 'web';
+  const { width } = useWindowDimensions();
+  const isMobile = width < 768;
   const isLoginScreen = pathname === '/login';
 
   return (
@@ -19,7 +21,7 @@ export default function ActionBar() {
         </View>
         <InstallPWA />
       </View>
-      {isWeb && !isLoginScreen && <WebMenu />}
+      {isWeb && !isMobile && !isLoginScreen && <WebMenu />}
     </SafeAreaView>
   );
 }
