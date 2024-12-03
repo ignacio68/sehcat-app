@@ -1,3 +1,3 @@
-# React Native MVP
+# SehCat MVP
 
-MVP for the scientific calculator developed with React Native and Expo
+MVP of a PWA for the scientific calculator developed with React Native and Expo
